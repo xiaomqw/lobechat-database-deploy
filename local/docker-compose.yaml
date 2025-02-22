@@ -1,6 +1,6 @@
 services:
   network-service:
-    image: alpine:3.20
+    image: alpine:latest
     container_name: lobe-network
     ports:
       - "${MINIO_PORT}:${MINIO_PORT}" # MinIO API
@@ -13,7 +13,7 @@ services:
       - lobe-network
 
   postgresql:
-    image: pgvector/pgvector:pg16
+    image: pgvector/pgvector:pg17
     container_name: lobe-postgres
     ports:
       - "5432:5432"
@@ -32,7 +32,7 @@ services:
       - lobe-network
 
   minio:
-    image: minio/minio:RELEASE.2024-09-13T20-26-02Z
+    image: minio/minio:latest
     container_name: lobe-minio
     network_mode: "service:network-service"
     volumes:
@@ -46,7 +46,7 @@ services:
       server /etc/minio/data --address ":${MINIO_PORT}" --console-address ":9001"
 
   logto:
-    image: svhd/logto:1.20
+    image: svhd/logto:latest
     container_name: lobe-logto
     network_mode: "service:network-service"
     depends_on:
@@ -61,7 +61,7 @@ services:
     entrypoint: ["sh", "-c", "npm run cli db seed -- --swe && npm start"]
 
   lobe:
-    image: lobehub/lobe-chat-database:v1.19.21
+    image: lobehub/lobe-chat-database:latest
     container_name: lobe-database
     network_mode: "service:network-service"
     depends_on:
